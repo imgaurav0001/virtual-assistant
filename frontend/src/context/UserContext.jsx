@@ -5,11 +5,11 @@ import axios from "axios";
 export const UserContext = createContext();
 
 function UserContextProvider({ children }) {
-  // ✅ Automatically choose correct backend
+  // 👇 Use your deployed backend URL here
   const serverUrl =
     import.meta.env.MODE === "production"
-      ? "https://virtual-assistant-backend-fkfw.onrender.com" // Render backend
-      : "http://localhost:8000"; // Local backend
+      ? "https://virtual-assistant-backend-fkfw.onrender.com" // backend on Render
+      : "http://localhost:8000"; // local dev
 
   const [userData, setUserData] = useState(undefined); // undefined while loading
 
