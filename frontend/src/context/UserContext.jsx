@@ -5,7 +5,12 @@ import axios from "axios";
 export const UserContext = createContext();
 
 function UserContextProvider({ children }) {
-  const serverUrl = "http://localhost:8000";
+  // ✅ Automatically choose correct backend
+  const serverUrl =
+    import.meta.env.MODE === "production"
+      ? "https://virtual-assistant-backend-fkfw.onrender.com" // Render backend
+      : "http://localhost:8000"; // Local backend
+
   const [userData, setUserData] = useState(undefined); // undefined while loading
 
   // ------------------ Get Current User ------------------
@@ -34,7 +39,10 @@ function UserContextProvider({ children }) {
       // We expect an object { type, userinput, response }
       return result.data;
     } catch (error) {
-      console.error("❌ Error fetching Gemini response:", error?.response?.data ?? error.message ?? error);
+      console.error(
+        "❌ Error fetching Gemini response:",
+        error?.response?.data ?? error.message ?? error
+      );
       return null;
     }
   };
