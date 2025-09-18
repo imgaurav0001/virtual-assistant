@@ -1,14 +1,18 @@
-// frontend/src/context/UserContext.jsx
 import React, { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
 export const UserContext = createContext();
 
 function UserContextProvider({ children }) {
-  const serverUrl = "http://localhost:8000";
-  const [userData, setUserData] = useState(undefined); // undefined while loading
+  // --- START OF DEPLOYMENT-SAFE CODE ---
+  // This automatically sets the correct backend URL for local dev vs. production
+  const serverUrl = import.meta.env.MODE === 'production'
+    ? "" // On Vercel, the backend is at the same domain
+    : "http://localhost:8000"; // On your local machine
+  // --- END OF DEPLOYMENT-SAFE CODE ---
 
-  // ------------------ Get Current User ------------------
+  const [userData, setUserData] = useState(undefined);
+
   const handleCurrentUser = async () => {
     try {
       const result = await axios.get(`${serverUrl}/api/users/me`, {
@@ -22,7 +26,6 @@ function UserContextProvider({ children }) {
     }
   };
 
-  // ------------------ Ask Gemini Assistant ------------------
   const getGeminiResponse = async (command) => {
     try {
       const result = await axios.post(
@@ -30,8 +33,6 @@ function UserContextProvider({ children }) {
         { command },
         { withCredentials: true }
       );
-
-      // We expect an object { type, userinput, response }
       return result.data;
     } catch (error) {
       console.error("❌ Error fetching Gemini response:", error?.response?.data ?? error.message ?? error);
