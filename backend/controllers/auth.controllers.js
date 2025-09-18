@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import User from "../model/user.model.js";
 import generateToken from "../config/token.js";
 
-
 // ----------------- SIGN UP -----------------
 export const signUp = async (req, res) => {
   try {
@@ -36,11 +35,11 @@ export const signUp = async (req, res) => {
     // Generate JWT
     const token = generateToken(newUser._id);
 
-    // Set cookie
+    // Set cookie (cross-domain safe)
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // use secure in prod
-      sameSite: "Strict",
+      secure: true, // required for SameSite=None
+      sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
@@ -79,11 +78,11 @@ export const login = async (req, res) => {
     // Generate JWT
     const token = generateToken(user._id);
 
-    // Set cookie
+    // Set cookie (cross-domain safe)
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      secure: true,
+      sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -107,8 +106,8 @@ export const logout = (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      secure: true,
+      sameSite: "None",
     });
     res.status(200).json({ message: "✅ Logged out successfully" });
   } catch (error) {
