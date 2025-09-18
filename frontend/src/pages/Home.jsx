@@ -177,6 +177,8 @@ function Home() {
         />
       </div>
 
+      {/* Triggering a new build */}
+
       <h2 className="mt-6 text-white text-2xl md:text-3xl font-bold text-center drop-shadow-lg">
         I'm {userData?.assistantName || "Your Assistant"}
       </h2>
