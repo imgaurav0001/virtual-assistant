@@ -1,0 +1,17 @@
+# Backend dependencies
+backend/node_modules
+
+# Frontend dependencies
+frontend/node_modules
+
+# Frontend build output
+frontend/dist
+
+# Environment variables
+backend/.env
+
+# Log files
+*.log
+
+# VS Code Local History extension folder
+/.history
